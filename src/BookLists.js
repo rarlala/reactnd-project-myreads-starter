@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import BookList from './BookList';
 
 class BookLists extends Component{ 
   
   render(){
     let bookLists = {}
-    this.props.books.forEach((book) => {
+    const {books, onChangeShelf}= this.props
+    books.forEach((book) => {
       bookLists[book.shelf] = bookLists[book.shelf] || [];
       bookLists[book.shelf].push(book);
     });
@@ -17,13 +19,30 @@ class BookLists extends Component{
         </div>
         <div className="list-books-content">
           <div>
-            <BookList books={bookLists['currentlyReading'] || []} listTitle='Currently Reading'/>
-            <BookList books={bookLists['wantToRead'] || []} listTitle='Want To Read'/>
-            <BookList books={bookLists['read'] || []} listTitle='Read'/>
+            <BookList
+              books={bookLists['currentlyReading'] || []}
+              listTitle='Currently Reading'
+              onChangeShelf={onChangeShelf}
+            />
+            <BookList 
+              books={bookLists['wantToRead'] || []} 
+              listTitle='Want To Read'
+              onChangeShelf={onChangeShelf}
+            />
+            <BookList 
+              books={bookLists['read'] || []} 
+              listTitle='Read'
+              onChangeShelf={onChangeShelf}
+            />
           </div>
         </div>
         <div className="open-search">
-          <button onClick={() => this.setState({ showSearchPage: true })}>Add a book</button>
+          <Link to='/search'>
+            <button 
+              onClick={() => this.setState({ showSearchPage: true })}>
+                Add a book
+            </button>
+          </Link>
         </div>
       </div>
     )
