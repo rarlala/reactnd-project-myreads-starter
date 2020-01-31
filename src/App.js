@@ -10,15 +10,18 @@ class BooksApp extends React.Component {
     books:[]
   }
 
+  constructor(props) {
+    super(props);
+    this.onChangeShelf = this.onChangeShelf.bind(this);
+  }
+
   onChangeShelf(book, changeShelf){
     BooksAPI.update(book, changeShelf)
-      .then((books) => {
-        this.setState(prevState => {
-          return {
-            books: [...prevState.bookList.filter(b => b.id !== book.id), book] 
-          }
-        });
-      });
+    this.setState(prevState => {
+      return {
+        books: [...prevState.books.filter(b => b.id === book.id ? b.shelf=changeShelf : book)] 
+      }
+    });
   }
 
   componentDidMount(){
