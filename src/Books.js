@@ -11,7 +11,7 @@ class Book extends Component{
           <div className="book-shelf-changer">
             <select 
               onChange={(event)=> onChangeShelf(book, event.target.value)}
-              defaultValue={book.shelf}>
+              defaultValue={book.shelf ? book.shelf : book.shelf='none'}>
               <option value="move" disabled>Move to...</option>
               <option value="currentlyReading">Currently Reading</option>
               <option value="wantToRead">Want to Read</option>
@@ -22,7 +22,6 @@ class Book extends Component{
         </div>
         <div className="book-title">{book.title}</div>
         <div className="book-authors">{book.authors}</div>
-        <div className="book-authors">{book.shelf}</div>
       </div>
     )
   }
