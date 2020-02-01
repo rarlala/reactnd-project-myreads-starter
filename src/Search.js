@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import escapeRegExp from 'escape-string-regexp';
 import * as BooksAPI from './utils/BooksAPI'
 import Books from './Books'
 
@@ -14,9 +13,9 @@ class Search extends Component{
     BooksAPI.search(query, 20)
       .then((result)=>{
         if( query === ''){
-          this.setState({ searchResults: [], query: query.trim()})
+          this.setState({ searchResults: [], query: query})
         }
-        this.setState({ searchResults: result, query: query.trim() })
+        this.setState({ searchResults: result, query: query })
       });
   }
 
@@ -29,16 +28,13 @@ class Search extends Component{
     const { query, searchResults } = this.state
     const { onChangeShelf } = this.props
 
-    let searchBooks
-    if (query.length !== 0) {
-      const match = new RegExp(escapeRegExp(query), 'i');
-      if (searchResults.length !== 0){
+    let searchBooks = []
+    if (query) {
+      const match = new RegExp(query, 'i');
+      if(searchResults.length){
         searchBooks = searchResults.filter((book) => (
           match.test(book.title)
-        ))
-      }
-    } else {
-      searchBooks = [];
+      ))}
     }
 
     return(
@@ -59,14 +55,15 @@ class Search extends Component{
           <div className="search-books-results">
 
             <ol className="books-grid">
-              {searchBooks.map((book)=>(
-                <li key={book.id}>
-                  <Books 
-                    book={book}
-                    onChangeShelf={onChangeShelf}
-                  />
-                </li>
-              ))
+               { (searchBooks) ? (
+                searchBooks.map((book)=>(
+                  <li key={book.id}>
+                    <Books 
+                      book={book}
+                      onChangeShelf={onChangeShelf}
+                    />
+                  </li>
+              ))) : 'No Data'
               }                
             </ol>
           </div>
