@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import * as BooksAPI from './utils/BooksAPI'
-import Books from './Books'
 
 class Search extends Component{
   state = {
@@ -19,14 +18,14 @@ class Search extends Component{
       });
   }
 
-  getShelf = (books, id) => {
-    const book = this.props.books.find((b)=>(b.id === id))
-    return (book && book.shelf) ? book.shelf : 'none'
-  }
+  // findShelf = (books, id) => {
+  //   const book = books.find((b) => (b.id === id))
+  //   return (book && book.shelf) ? book.shelf : 'none'
+  // }
 
   render(){
     const { query, searchResults } = this.state
-    const { onChangeShelf } = this.props
+    const { books, onChangeShelf, findShelf } = this.props
 
     let searchBooks = []
     if (query) {
@@ -53,18 +52,30 @@ class Search extends Component{
             </div>
           </div>
           <div className="search-books-results">
-
             <ol className="books-grid">
-               { (searchBooks) ? (
-                searchBooks.map((book)=>(
-                  <li key={book.id}>
-                    <Books 
-                      book={book}
-                      onChangeShelf={onChangeShelf}
-                    />
-                  </li>
-              ))) : 'No Data'
-              }                
+              {searchBooks.map((book)=>(
+                <li key={book.id}>
+                  {console.log(book)}
+                  <div className="book">
+                    <div className="book-top">
+                      <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks['smallThumbnail']})`}}></div>
+                      <div className="book-shelf-changer">
+                        <select 
+                          onChange={(event)=> onChangeShelf(book, event.target.value)}
+                          defaultValue={findShelf(books, book.id)}>
+                          <option value="move" disabled>Move to...</option>
+                          <option value="currentlyReading">Currently Reading</option>
+                          <option value="wantToRead">Want to Read</option>
+                          <option value="read">Read</option>
+                          <option value="none">None</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="book-title">{book.title}</div>
+                    <div className="book-authors">{book.authors}</div>
+                  </div>
+                </li>
+              ))}
             </ol>
           </div>
         </div>

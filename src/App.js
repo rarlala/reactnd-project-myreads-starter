@@ -15,6 +15,11 @@ class BooksApp extends React.Component {
     this.onChangeShelf = this.onChangeShelf.bind(this);
   }
 
+  findShelf = (books, id) => {
+    const book = books.find((b) => (b.id === id))
+    return (book && book.shelf) ? book.shelf : 'none'
+  }
+
   onChangeShelf(book, changeShelf){
     BooksAPI.update(book, changeShelf)
     this.setState(prevState => {
@@ -47,6 +52,7 @@ class BooksApp extends React.Component {
           <Search 
             books={this.state.books}
             onChangeShelf={this.onChangeShelf}
+            findShelf={this.findShelf}
           />
         )} />
       </div>
